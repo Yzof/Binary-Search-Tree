@@ -120,9 +120,37 @@ Notes:
   end
 
   def depth(tree_node = @root)
+    # Steps:
+    # If the current tree_node has no children
+    #return 0
+    # Find the depth of the right side(if not possible set to 0)
+    # Find the depth of the left side(if not possible set to 0)
+    # return whichever is larger plus 1
+    return 0 if tree_node.left.nil? && tree_node.right.nil?
+
+    right_depth = tree_node.right.nil? ? 0 : depth(tree_node.right)
+    left_depth = tree_node.left.nil? ? 0 : depth(tree_node.left)
+
+    target_depth = left_depth >= right_depth ? left_depth : right_depth
+
+    target_depth + 1
   end
 
   def is_balanced?(tree_node = @root)
+    return true if tree_node.nil?
+    
+    right_depth = tree_node.right.nil? ? 0 : depth(tree_node.right)
+    left_depth = tree_node.left.nil? ? 0 : depth(tree_node.left)
+
+    if (right_depth - left_depth).abs <= 1
+      if is_balanced?(tree_node.right) && is_balanced?(tree_node.left)
+        true
+      else
+        false
+      end
+    else
+      false
+    end
   end
 
   def in_order_traversal(tree_node = @root, arr = [])
