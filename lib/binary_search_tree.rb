@@ -10,6 +10,12 @@ BST Notes:
   - Binary Search Trees should have O(log n) time for find, insert and delete
   - BST's heavily rely on recursion to work
   - BST's insert, find and delete bigO are related to the depth of the tree
+  - A BST has the following criteria that need to be satisified in order to
+  be considered balanced:
+    - The difference in depth between the left and right sides are at most 1
+    - Both the left and right sides are also balanced(recursive definition)
+  - As a byproduct of the Hibbard Deletion, our tree will become semi-unbalanced
+  so we need to create a self-balancing tree 
 =end
 
 class BinarySearchTree
@@ -43,6 +49,23 @@ Find Notes:
   def delete(value)
 =begin
 Notes:
+  -The following deletion algorithm is known as Hibbard Deletion
+  - When deleting something, you must preserve the Binary Search Tree rules
+  meaning that if the target for deletion is on the right you must replace it
+  with something larger than the parent, or if it is on the left, you must replace
+  the target with something smaller than the parent
+  - The replacement must also be greater than the left sub-tree in order to
+  preserve the BST rules
+  - In the same fashion, the replacement must also be less than the right sub-tree
+  - To satisfy all these rules, you must select the largest node in the left
+  sub-tree of the target for deletion.
+  - To do that, you must go from the root of the sub-tree and then travel as
+  far right as you can, the last node there is the replacement for the deleted
+  node
+  - If the replacement target has a left child(By definition the replacement
+  will never have a right child otherwise that child would be the replacment)
+  then we simply replace the parent of the replacement targets reference
+  from the target to the child, as the new right child.
   Steps:
     -
 =end
