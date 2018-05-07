@@ -30,7 +30,7 @@ class BinarySearchTree
     #     - Check if the root node is less then or greater than the target
     #     - Check to see if the corresponding direction is already taken or not
     #     - If it isn't, insert the target in as a new node
-    #     - If the spot is taken, repeat the process fo checking equality
+    #     - If the spot is taken, repeat the process for checking equality
     if tree_node.nil?
       @root = BSTNode.new(value)
     elsif tree_node.value >= value
