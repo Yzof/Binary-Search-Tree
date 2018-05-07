@@ -112,6 +112,11 @@ Notes:
 
   # helper method for #delete:
   def maximum(tree_node = @root)
+    if tree_node.right.nil?
+      tree_node
+    else
+      maximum(tree_node.right)
+    end
   end
 
   def depth(tree_node = @root)
