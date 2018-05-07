@@ -55,16 +55,24 @@ class BinarySearchTree
   end
 
   def find(value, tree_node = @root)
-=begin
-Find Notes:
-  Steps:
-    - Check if the root node is the target
-    - Check to see that the root node has children
-    - See if the target is on the left or the right
-    - If the target is supposed to be on a side, but the current node
-    has no child in that direction, then the target is not in the tree
-    - Repeat on correct side
-=end
+    # Find Notes:
+    #   Steps:
+    #     - Check if the root node is the target
+    #     - Check to see that the root node has children
+    #     - See if the target is on the left or the right
+    #     - If the target is supposed to be on a side, but the current node
+    #     has no child in that direction, then the target is not in the tree
+    #     - Repeat on correct side
+
+    if tree_node.value == value
+      tree_node
+    elsif tree_node.left.nil? && tree_node.right.nil?
+      nil
+    elsif tree_node.value >= value
+      find(value, tree_node.left)
+    elsif tree_node.value < value
+      find(value, tree_node.right)
+    end
   end
 
   def delete(value)
