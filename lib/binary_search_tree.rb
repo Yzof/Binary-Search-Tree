@@ -1,6 +1,6 @@
 # There are many ways to implement these methods, feel free to add arguments
 # to methods as you see fit, or to create helper methods.
-
+require 'bst_node'
 =begin
 BST Notes:
   - Every node to the left of the root node is greater than the root node
@@ -15,22 +15,43 @@ BST Notes:
     - The difference in depth between the left and right sides are at most 1
     - Both the left and right sides are also balanced(recursive definition)
   - As a byproduct of the Hibbard Deletion, our tree will become semi-unbalanced
-  so we need to create a self-balancing tree 
+  so we need to create a self-balancing tree
 =end
 
 class BinarySearchTree
+  attr_accessor :root
   def initialize
+    @root = nil
   end
 
-  def insert(value)
-=begin
-Insert Notes:
-  Steps:
-    - Check if the root node is less then or greater than the target
-    - Check to see if the corresponding direction is already taken or not
-    - If it isn't, insert the target in as a new node
-    - If the spot is taken, repeat the process fo checking equality
-=end
+  def insert(value, tree_node = @root)
+    # Insert Notes:
+    #   Steps:
+    #     - Check if the root node is less then or greater than the target
+    #     - Check to see if the corresponding direction is already taken or not
+    #     - If it isn't, insert the target in as a new node
+    #     - If the spot is taken, repeat the process fo checking equality
+    if tree_node.nil?
+      @root = BSTNode.new(value)
+    elsif tree_node.value >= value
+
+      if tree_node.left.nil?
+        new_node = BSTNode.new(value)
+        tree_node.left = new_node
+      else
+        insert(value, tree_node.left)
+      end
+
+    elsif tree_node.value < value
+
+      if tree_node.right.nil?
+        new_node = BSTNode.new(value)
+        tree_node.right = new_node
+      else
+        insert(value, tree_node.right)
+      end
+
+    end
   end
 
   def find(value, tree_node = @root)
@@ -67,7 +88,17 @@ Notes:
   then we simply replace the parent of the replacement targets reference
   from the target to the child, as the new right child.
   Steps:
-    -
+    - (Any mention of deletion in these steps means removing the reference
+      to the target from the targets parent)
+    - Repeat steps of the find method
+    - Check if the target has children
+    - If no children, simply delete the node
+    - If only one child, promote the child
+    - If two children, search down the left sub-tree for the maximum value
+      - From the root of the left sub-tree continue down the right side
+        until you get to a node that has no right child.
+      - This right-childless node is the replacement target
+      - If this node has a left child, promote it
 =end
   end
 
