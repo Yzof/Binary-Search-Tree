@@ -38,6 +38,7 @@ class BinarySearchTree
       if tree_node.left.nil?
         new_node = BSTNode.new(value)
         tree_node.left = new_node
+        new_node.parent = tree_node
       else
         insert(value, tree_node.left)
       end
@@ -47,6 +48,7 @@ class BinarySearchTree
       if tree_node.right.nil?
         new_node = BSTNode.new(value)
         tree_node.right = new_node
+        new_node.parent = tree_node
       else
         insert(value, tree_node.right)
       end
@@ -108,6 +110,50 @@ Notes:
       - This right-childless node is the replacement target
       - If this node has a left child, promote it
 =end
+    target = find(value)
+    right = nil || target.right
+    left = nil || target.left
+    parent = target.parent
+
+    if @root == target
+      @root = nil
+
+    elsif (right.nil? && left.nil?) && @root != target
+      if parent.left == target
+        parent.left = nil
+      else
+        parent.right = nil
+      end
+      target.parent = nil
+
+    elsif right && left
+      replacement = maximum(left)
+      delete(replacement.value)
+      if parent.left == target
+        parent.left = replacement
+      else
+        parent.right = replacement
+      end
+      replacement.right = right
+      replacement.left = left
+      replacement.parent = parent
+
+    elsif left.nil? && @root != target
+      if parent.left == target
+        parent.left = right
+      else
+        parent.right = right
+      end
+      target.parent = nil
+
+    elsif right.nil? && @root != target
+      if parent.left == target
+        parent.left = left
+      else
+        parent.right = left
+      end
+      target.parent = nil
+    end
   end
 
   # helper method for #delete:
@@ -138,7 +184,7 @@ Notes:
 
   def is_balanced?(tree_node = @root)
     return true if tree_node.nil?
-    
+
     right_depth = tree_node.right.nil? ? 0 : depth(tree_node.right)
     left_depth = tree_node.left.nil? ? 0 : depth(tree_node.left)
 
