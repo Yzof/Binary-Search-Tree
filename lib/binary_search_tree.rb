@@ -78,38 +78,36 @@ class BinarySearchTree
   end
 
   def delete(value)
-=begin
-Notes:
-  -The following deletion algorithm is known as Hibbard Deletion
-  - When deleting something, you must preserve the Binary Search Tree rules
-  meaning that if the target for deletion is on the right you must replace it
-  with something larger than the parent, or if it is on the left, you must replace
-  the target with something smaller than the parent
-  - The replacement must also be greater than the left sub-tree in order to
-  preserve the BST rules
-  - In the same fashion, the replacement must also be less than the right sub-tree
-  - To satisfy all these rules, you must select the largest node in the left
-  sub-tree of the target for deletion.
-  - To do that, you must go from the root of the sub-tree and then travel as
-  far right as you can, the last node there is the replacement for the deleted
-  node
-  - If the replacement target has a left child(By definition the replacement
-  will never have a right child otherwise that child would be the replacment)
-  then we simply replace the parent of the replacement targets reference
-  from the target to the child, as the new right child.
-  Steps:
-    - (Any mention of deletion in these steps means removing the reference
-      to the target from the targets parent)
-    - Repeat steps of the find method
-    - Check if the target has children
-    - If no children, simply delete the node
-    - If only one child, promote the child
-    - If two children, search down the left sub-tree for the maximum value
-      - From the root of the left sub-tree continue down the right side
-        until you get to a node that has no right child.
-      - This right-childless node is the replacement target
-      - If this node has a left child, promote it
-=end
+  # Notes:
+  #   -The following deletion algorithm is known as Hibbard Deletion
+  #   - When deleting something, you must preserve the Binary Search Tree rules
+  #   meaning that if the target for deletion is on the right you must replace it
+  #   with something larger than the parent, or if it is on the left, you must replace
+  #   the target with something smaller than the parent
+  #   - The replacement must also be greater than the left sub-tree in order to
+  #   preserve the BST rules
+  #   - In the same fashion, the replacement must also be less than the right sub-tree
+  #   - To satisfy all these rules, you must select the largest node in the left
+  #   sub-tree of the target for deletion.
+  #   - To do that, you must go from the root of the sub-tree and then travel as
+  #   far right as you can, the last node there is the replacement for the deleted
+  #   node
+  #   - If the replacement target has a left child(By definition the replacement
+  #   will never have a right child otherwise that child would be the replacment)
+  #   then we simply replace the parent of the replacement targets reference
+  #   from the target to the child, as the new right child.
+  #   Steps:
+  #     - (Any mention of deletion in these steps means removing the reference
+  #       to the target from the targets parent)
+  #     - Repeat steps of the find method
+  #     - Check if the target has children
+  #     - If no children, simply delete the node
+  #     - If only one child, promote the child
+  #     - If two children, search down the left sub-tree for the maximum value
+  #       - From the root of the left sub-tree continue down the right side
+  #         until you get to a node that has no right child.
+  #       - This right-childless node is the replacement target
+  #       - If this node has a left child, promote it
     target = find(value)
     right = nil || target.right
     left = nil || target.left
@@ -200,6 +198,44 @@ Notes:
   end
 
   def in_order_traversal(tree_node = @root, arr = [])
+    # Steps:
+    #   - If node has no children, add node to array
+    #   - If node has children find the in_order array of the children
+    #   - Combine the left side(if it exists) the current node, and the
+    #     right child array.
+    if tree_node.right.nil? && tree_node.left.nil?
+      arr.push(tree_node.value)
+      return arr
+    end
+
+    right = tree_node.right.nil? ? [] : in_order_traversal(tree_node.right)
+    left = tree_node.left.nil? ? [] : in_order_traversal(tree_node.left)
+
+    left.concat([tree_node.value].concat(right))
+  end
+
+  def self.I_O_T(tree_node = @root, arr = [])
+    if tree_node.right.nil? && tree_node.left.nil?
+      arr.push(tree_node.value)
+      return arr
+    end
+
+    right = tree_node.right.nil? ? [] : self.I_O_T(tree_node.right)
+    left = tree_node.left.nil? ? [] : self.I_O_T(tree_node.left)
+
+    left.concat([tree_node.value].concat(right))
+  end
+
+  def self.find(value, tree_node = @root)
+    if tree_node.value == value
+      tree_node
+    elsif tree_node.left.nil? && tree_node.right.nil?
+      nil
+    elsif tree_node.value >= value
+      find(value, tree_node.left)
+    elsif tree_node.value < value
+      find(value, tree_node.right)
+    end
   end
 
 
